@@ -8,16 +8,19 @@ public class MatrixTurning {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        int[][] matrix = new int[SIZE][SIZE];
+        int[][] originalMatrix = new int[SIZE][SIZE];
 
         Random random = new Random();
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                matrix[i][j] = random.nextInt(256);
+                originalMatrix[i][j] = random.nextInt(256);
             }
         }
 
-        printMatrix(matrix);
+        int[][] currentMatrix = copyMatrix(originalMatrix);
+
+        printMatrix(currentMatrix);
+
         while (true) {
             printMenu();
             String userChoice = scanner.nextLine();
@@ -27,18 +30,16 @@ public class MatrixTurning {
                 int operation = Integer.parseInt(userChoice);
                 switch (operation) {
                     case (1):
-                        int[][] transposedMatrix = transpositionMatrix(matrix);
-                        int[][] rotated90degreesMatrix = rotationMatrix90Degrees(transposedMatrix);
-                        printMatrix(rotated90degreesMatrix);
+                        currentMatrix = rotationMatrix90Degrees(currentMatrix);
+                        printMatrix(currentMatrix);
                         break;
                     case (2):
-                        int[][] rotated180DegreesMatrix = rotationMatrix180degrees(matrix);
-                        printMatrix(rotated180DegreesMatrix);
+                        currentMatrix = rotationMatrix180degrees(currentMatrix);
+                        printMatrix(currentMatrix);
                         break;
                     case (3):
-                        int[][] transposedMatrixFor270 = transpositionMatrix(matrix);
-                        int[][] rotated270DegreesMatrix = rotationMatrix270Degrees(transposedMatrixFor270);
-                        printMatrix(rotated270DegreesMatrix);
+                        currentMatrix = rotationMatrix270Degrees(currentMatrix);
+                        printMatrix(currentMatrix);
                         break;
                 }
             }
@@ -59,41 +60,47 @@ public class MatrixTurning {
     }
 
     public static int[][] rotationMatrix90Degrees(int[][] matrix) {
+        int[][] rotatedMatrix = copyMatrix(matrix);
+        rotatedMatrix = transpositionMatrix(rotatedMatrix);
+
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE / 2; j++) {
-                int temp = matrix[i][j];
-                matrix[i][j] = matrix[i][SIZE - 1 - j];
-                matrix[i][SIZE - 1 - j] = temp;
+                int temp = rotatedMatrix[i][j];
+                rotatedMatrix[i][j] = rotatedMatrix[i][SIZE - 1 - j];
+                rotatedMatrix[i][SIZE - 1 - j] = temp;
             }
         }
-        return matrix;
+        return rotatedMatrix;
     }
 
     public static int[][] rotationMatrix270Degrees(int[][] matrix) {
+        int[][] rotatedMatrix = copyMatrix(matrix);
+        rotatedMatrix = transpositionMatrix(rotatedMatrix);
         for (int j = 0; j < SIZE; j++) {
             for (int i = 0; i < SIZE / 2; i++) {
-                int temp = matrix[i][j];
-                matrix[i][j] = matrix[SIZE - 1 - i][j];
-                matrix[SIZE - 1 - i][j] = temp;
+                int temp = rotatedMatrix[i][j];
+                rotatedMatrix[i][j] = rotatedMatrix[SIZE - 1 - i][j];
+                rotatedMatrix[SIZE - 1 - i][j] = temp;
             }
         }
-        return matrix;
+        return rotatedMatrix;
     }
 
     public static int[][] rotationMatrix180degrees(int[][] matrix) {
         int n = matrix.length;
+        int[][] rotatedMatrix = copyMatrix(matrix);
         for (int i = 0; i < (n + 1) / 2; i++) {
             for (int j = 0; j < n; j++) {
                 int oppositeI = n - 1 - i;
                 int oppositeJ = n - 1 - j;
                 if (i < oppositeI || (i == oppositeI && j < oppositeJ)) {
-                    int temp = matrix[i][j];
-                    matrix[i][j] = matrix[oppositeI][oppositeJ];
-                    matrix[oppositeI][oppositeJ] = temp;
+                    int temp = rotatedMatrix[i][j];
+                    rotatedMatrix[i][j] = rotatedMatrix[oppositeI][oppositeJ];
+                    rotatedMatrix[oppositeI][oppositeJ] = temp;
                 }
             }
         }
-        return matrix;
+        return rotatedMatrix;
     }
 
     public static void printMatrix(int[][] matrix) {
