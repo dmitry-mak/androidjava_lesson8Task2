@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class MatrixTurning {
 
-    public static final int SIZE = 5;
+    public static final int SIZE = 8;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
